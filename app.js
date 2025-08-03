@@ -28,7 +28,7 @@ app.post("/tambah-makanan", (req, res) => {
   connection.query(query, (err, result) => {
     if (err) {
       console.log("error:", err);
-      res.status(500).send("error from server");
+      res.status(500).send("error from server", err);
     }
     if (result.affectedRows > 0) {
       res.status(200).send("succes add data!");
