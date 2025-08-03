@@ -3,6 +3,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const connection = require("./controller/conn");
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.send("API Ready!");
 });
