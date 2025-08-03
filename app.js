@@ -2,8 +2,9 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
 const connection = require("./controller/conn");
+const bodyParser = require("body-parser");
 
-app.use(express.json());
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
   res.send("API Ready!");
@@ -30,10 +31,9 @@ app.post("/tambah-makanan", (req, res) => {
       res.status(500).send("error from server");
     }
     if (result.affectedRows > 0) {
-      console.log("success add data");
-      res.status(200).send("success add data");
+      res.status(200).send("succes add data!");
     } else {
-      res.status(400).send("failed add data");
+      res.status(400).send("failed add data!");
     }
   });
 });
