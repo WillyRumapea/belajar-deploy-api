@@ -23,6 +23,7 @@ app.get("/daftar-makanan", (req, res) => {
 });
 
 app.post("/tambah-makanan", (req, res) => {
+  console.log("Body Received:", req.body);
   const { nama_makanan, harga_makanan } = req.body;
   const query = `INSERT INTO table_makanan (nama_makanan, harga_makanan) VALUES ('${nama_makanan}', ${harga_makanan})`;
   connection.query(query, (err, result) => {
