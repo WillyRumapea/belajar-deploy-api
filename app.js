@@ -4,9 +4,11 @@ const PORT = process.env.PORT || 3000;
 const connection = require("./controller/conn");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const generateToken = require("./routes/generate-token");
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use("/api", generateToken);
 
 app.get("/", (req, res) => {
   res.send("API Ready!");
