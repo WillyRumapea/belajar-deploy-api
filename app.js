@@ -75,7 +75,7 @@ app.post("/login", async (req, res) => {
       return res.status(404).send("User not found");
     }
     console.log(result);
-    const storedPassword = result[0].password;
+    const storedPassword = result[0].users_password;
     console.log(storedPassword);
 
     hashLogin(users_password, storedPassword, (err, isMatch) => {
