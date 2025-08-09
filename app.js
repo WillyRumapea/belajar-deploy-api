@@ -74,6 +74,7 @@ app.post("/login", async (req, res) => {
     if (result.length === 0) {
       return res.status(404).send("User not found");
     }
+    console.log(result);
     const storedPassword = result[0].password;
     console.log(storedPassword);
 
