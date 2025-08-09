@@ -6,7 +6,7 @@ const hashPassword = async (req, res, next) => {
 
   bcrypt.hash(users_password, 10, (err, hashed) => {
     if (err) return res.status(500).send("Failed to hash password!");
-    req.body.password = hashed;
+    req.body.users_password = hashed;
     next();
   });
 };
