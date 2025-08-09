@@ -76,7 +76,7 @@ app.post("/login", async (req, res) => {
     }
     const storedPassword = result[0].password;
 
-    comparePassword(password, storedPassword, (err, isMatch) => {
+    hashLogin(password, storedPassword, (err, isMatch) => {
       if (err) {
         console.log("Error comparing passwords:", err);
         return res.status(500).send("Internal error when comparing passwords");
