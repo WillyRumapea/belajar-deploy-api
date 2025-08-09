@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(
   cors({
     origin: "https://belajar-deploy-fe.vercel.app",
-    credential: true,
+    credentials: true,
   })
 );
 app.use(
@@ -74,9 +74,9 @@ app.post("/login", async (req, res) => {
     if (result.length === 0) {
       return res.status(404).send("User not found");
     }
-    console.log(result);
+    // console.log(result);
     const storedPassword = result[0].users_password;
-    console.log(storedPassword);
+    // console.log(storedPassword);
 
     hashLogin(users_password, storedPassword, (err, isMatch) => {
       if (err) {
