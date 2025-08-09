@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt");
 
-const comparePassword = (inputPassword, storedPassword, callback) => {
+const hashLogin = (inputPassword, storedPassword, callback) => {
   bcrypt.compare(inputPassword, storedPassword, (err, result) => {
     if (err) return callback(err);
     callback(null, result);
   });
 };
 
-module.exports = comparePassword;
+module.exports = hashLogin;
