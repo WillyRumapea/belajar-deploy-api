@@ -97,6 +97,19 @@ app.post("/login", async (req, res) => {
   });
 });
 
+app.get("/check-session", (req, res) => {
+  if (req.session.loggedin) {
+    res.json({
+      loggedin: req.session.loggedin,
+      user: req.session.user,
+    });
+  } else {
+    res.json({
+      loggedin: false,
+    });
+  }
+});
+
 app.get("/daftar-makanan", (req, res) => {
   const query = "SELECT * FROM table_makanan";
   connection.query(query, (err, result) => {
