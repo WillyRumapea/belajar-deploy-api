@@ -140,6 +140,29 @@ app.post("/tambah-makanan", (req, res) => {
   });
 });
 
+app.put("/update-makanan", (req, res) => {
+  const { id_makanan, nama_makanan, harga_makanan, gambar_makanan } = req.body;
+
+  if (!id_makanan || !nama_makanan || !harga_makanan || !gambar_makanan) {
+    return res.status(404).send("data not found");
+  }
+
+  const query = `UPDATE table_makanan 
+  SET nama_makanan ='${nama_makanan}', harga_makanan = '${harga_makanan}', gambar_makanan = '${gambar_makanan}' WHERE id_makanan = '${id_makanan}'
+  `;
+
+  connection.query(query, (err, result) => {
+    if (err) {
+      return res.status(500).send("error from server");
+    }
+    if (result.affectedRows > 0) {
+      return res.status(200).send("succes update data!");
+    } else {
+      return res.status(400).send("failed update data!");
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
