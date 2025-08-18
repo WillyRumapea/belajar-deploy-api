@@ -38,25 +38,49 @@ app.get("/", (req, res) => {
 
 app.post("/regist", hasgRegist, (req, res) => {
   const { users_name, users_password } = req.body;
+  const users_role = "user";
   if (!users_name || !users_password) {
-    return res.status(400).send("username or password can't be empty");
+    return res.status(400).send({
+      successz: false,
+      message: "Username or password cant empty",
+    });
   }
 
   const checkQuery = `SELECT users_name FROM users_table WHERE users_name = '${users_name}' `;
   connection.query(checkQuery, (err, result) => {
-    if (err) return res.status(500).send("Server  error while checking user");
+    if (err)
+      return res.status(500).send({
+        success: false,
+        message: "Server  error while checking username",
+      });
     if (result.length > 0) {
-      return res.status(400).send("Username already exists!");
+      return res.status(400).send({
+        success: false,
+        message: "Username already exists!",
+      });
     }
 
-    const query = `INSERT INTO users_table (users_name, users_password) VALUES ('${users_name}', '${users_password}')`;
+    const query = `INSERT INTO users_table (users_name, users_password, users_role) VALUES ('${users_name}', '${users_password}', '${users_role}')`;
     connection.query(query, (err, result) => {
       if (err)
-        return res.status(500).send("Server error while registering user");
+        return res.status(500).send({
+          success: false,
+          message: "Server error while registering user",
+        });
       if (result.affectedRows > 0) {
-        res.status(200).send("Successfully registered!");
+        res.status(200).send({
+          success: true,
+          message: "Successfully registered!",
+          user: {
+            users_id: result.insertId,
+            username: users_name,
+          },
+        });
       } else {
-        res.status(400).send("Failed to register user!");
+        res.status(400).send({
+          success: false,
+          message: "Failed to register user!",
+        });
       }
     });
   });
@@ -66,14 +90,24 @@ app.post("/login", async (req, res) => {
   const { users_name, users_password } = req.body;
 
   if (!users_name || !users_password) {
-    return res.status(400).send("username or password can't be empty");
+    return res.status(400).send({
+      success: false,
+      message: "Username or password can't be empty",
+    });
   }
 
-  const query = `SELECT users_id, users_password FROM users_table WHERE users_name = '${users_name}'`;
+  const query = `SELECT users_id, users_password, users_role FROM users_table WHERE users_name = '${users_name}'`;
   connection.query(query, (err, result) => {
-    if (err) return res.status(500).send("Internal database error");
+    if (err)
+      return res.status(500).send({
+        success: false,
+        message: "Internal database error",
+      });
     if (result.length === 0) {
-      return res.status(404).send("User not found");
+      return res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
     }
     // console.log(result);
     const storedPassword = result[0].users_password;
@@ -82,10 +116,16 @@ app.post("/login", async (req, res) => {
     hashLogin(users_password, storedPassword, (err, isMatch) => {
       if (err) {
         console.log("Error comparing passwords:", err);
-        return res.status(500).send("Internal error when comparing passwords");
+        return res.status(500).send({
+          success: false,
+          message: "Internal error when comparing passwords",
+        });
       }
       if (!isMatch) {
-        return res.status(401).send("Wrong password");
+        return res.status(401).send({
+          success: false,
+          message: "Your password is incorrect",
+        });
       }
       req.session.loggedin = true;
       req.session.user = {
@@ -93,7 +133,15 @@ app.post("/login", async (req, res) => {
         username: users_name,
       };
       console.log("User logged in:", req.session);
-      return res.status(200).send("login success!");
+      return res.status(200).send({
+        success: true,
+        message: "Login success!",
+        user: {
+          id: result[0].users_id,
+          username: users_name,
+          role: result[0].users_role,
+        },
+      });
     });
   });
 });
