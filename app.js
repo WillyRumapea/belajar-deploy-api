@@ -164,10 +164,24 @@ app.get("/daftar-makanan", (req, res) => {
   connection.query(query, (err, result) => {
     if (err) {
       console.log("error:", err);
-      res.status(500).send("Error to get data");
-    } else {
-      res.send(result);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
     }
+
+    if (result.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No data found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Retrived makanan data successfully",
+      data: result,
+    });
   });
 });
 
@@ -190,7 +204,7 @@ app.get("/daftar-users", (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Data retrived successfully",
+      message: "Retrived user data successfully",
       data: result,
     });
   });
