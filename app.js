@@ -171,6 +171,31 @@ app.get("/daftar-makanan", (req, res) => {
   });
 });
 
+app.get("/daftar-users", (req, res) => {
+  const query = `SELECT * FROM users_table`;
+  connection.query(query, (err, result) => {
+    if (err) {
+      res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No data found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Data retrived successfully",
+      data: result,
+    });
+  });
+});
+
 app.post("/tambah-makanan", (req, res) => {
   console.log("Body Received:", req.body);
   const { nama_makanan, harga_makanan, gambar_makanan } = req.body;
