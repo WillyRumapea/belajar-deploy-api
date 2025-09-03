@@ -151,6 +151,7 @@ app.get("/check-session", (req, res) => {
     res.json({
       loggedin: req.session.loggedin,
       user: req.session.user,
+      role: req.session.user.role,
     });
   } else {
     res.json({
@@ -159,6 +160,40 @@ app.get("/check-session", (req, res) => {
   }
 });
 
+app.post("/pesan-makanan", (req, res) => {
+  const {
+    orders_id,
+    orders_customer,
+    orders_menu,
+    orders_amount,
+    orders_total_price,
+    orders_status,
+  } = req.body;
+  const query = `INSERT INTO orders_table (orders_id, orders_customer, orders_menu, orders_amount, orders_total_price, orders_status) VALUES('${orders_id}', '${orders_customer}', '${orders_menu}', '${orders_amount}', '${orders_total_price}', '${orders_status}')`;
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("err:", err);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to add order, error from server",
+      });
+    }
+    if (result.affectedRows > 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Success add order!",
+        data: result,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Failed add your order",
+      });
+    }
+  });
+});
+
+//endpoint user dan admin
 app.get("/daftar-makanan", (req, res) => {
   const query = "SELECT * FROM table_makanan";
   connection.query(query, (err, result) => {
@@ -185,6 +220,7 @@ app.get("/daftar-makanan", (req, res) => {
   });
 });
 
+//endpoint admin
 app.get("/daftar-users", (req, res) => {
   const query = `SELECT * FROM users_table`;
   connection.query(query, (err, result) => {
