@@ -160,6 +160,25 @@ app.get("/check-session", (req, res) => {
   }
 });
 
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(`Error destroy session ${err}`);
+      return res.status(500).json({
+        success: false,
+        message: "Failed logout",
+      });
+    }
+
+    res.clearCookie("connect.sid", { path: "/" });
+
+    return res.status(200).json({
+      success: true,
+      message: "Success logout",
+    });
+  });
+});
+
 app.post("/pesan-makanan", (req, res) => {
   const {
     orders_id,
