@@ -9,6 +9,7 @@ const generateToken = require("./routes/generate-token");
 const session = require("express-session");
 const hasgRegist = require("./middleware/hashRegist");
 const hashLogin = require("./middleware/hashLogin");
+const hashPassword = require("./middleware/hashRegist");
 
 app.set("trust proxy", 1);
 app.use(bodyParser.json());
@@ -324,6 +325,38 @@ app.put("/update-makanan", (req, res) => {
       return res.status(200).send("succes update data!");
     } else {
       return res.status(400).send("failed update data!");
+    }
+  });
+});
+
+app.put("/update-user", hashPassword, (req, res) => {
+  const { users_id, users_name, users_password, users_role } = req.body;
+
+  if (!users_id || !users_name || !users_password || !users_role) {
+    return res.status(400).send("cant update while field undifined");
+  }
+
+  const query = `UPDATE users_table SET users_name = '${users_name}', users_password = '${users_password}', users_role = '${users_role}' WHERE users_id = '${users_id}'`;
+
+  connection.query(query, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: "internal server error",
+        error: err,
+      });
+    }
+    if (result.affectedRows > 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Success update data user!",
+        data: result,
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Failed to update data user!",
+      });
     }
   });
 });
