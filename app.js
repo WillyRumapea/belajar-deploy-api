@@ -391,6 +391,7 @@ app.put("/update-order", (req, res) => {
       return res.status(500).json({
         success: false,
         message: "Internal server error",
+        error: err,
       });
     }
     if (result.affectedRows > 0) {
