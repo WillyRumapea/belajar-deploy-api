@@ -361,6 +361,51 @@ app.put("/update-user", hashPassword, (req, res) => {
   });
 });
 
+app.put("/update-order", (req, res) => {
+  const {
+    orders_id,
+    orders_customer,
+    orders_menu,
+    orders_amount,
+    orders_total_price,
+    orders_status,
+  } = req.body;
+
+  if (
+    !orders_id ||
+    !orders_customer ||
+    !orders_menu ||
+    !orders_amount ||
+    !orders_total_price ||
+    !orders_status
+  ) {
+    return res.status(404).send("cant update while field undifined!");
+  }
+
+  const query = `UPDATE orders_table SET order_customer = '${orders_customer}', orders_menu = '${orders_menu}', orders_amount = '${orders_amount}', orders_total_price = '${orders_total_price}', orders_status = '${orders_status}' WHERE orders_id = '${orders_id}',`;
+
+  connection.query(query, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
+    }
+    if (result.affectedRows > 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Success update data order!",
+        data: result,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Failed to update data order",
+      });
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
