@@ -370,6 +370,7 @@ app.put("/update-order", (req, res) => {
     orders_total_price,
     orders_status,
   } = req.body;
+  console.log(req.body);
 
   if (
     !orders_id ||
