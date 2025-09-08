@@ -378,7 +378,8 @@ app.put("/update-order", (req, res) => {
     !orders_menu ||
     !orders_amount ||
     !orders_total_price ||
-    !orders_status
+    orders_status === undefined ||
+    orders_status === null
   ) {
     return res.status(404).send("cant update while field undifined!");
   }
