@@ -384,7 +384,7 @@ app.put("/update-order", (req, res) => {
     return res.status(404).send("cant update while field undifined!");
   }
 
-  const query = `UPDATE orders_table SET order_customer = '${orders_customer}', orders_menu = '${orders_menu}', orders_amount = '${orders_amount}', orders_total_price = '${orders_total_price}', orders_status = '${orders_status}' WHERE orders_id = '${orders_id}'`;
+  const query = `UPDATE orders_table SET orders_customer = '${orders_customer}', orders_menu = '${orders_menu}', orders_amount = '${orders_amount}', orders_total_price = '${orders_total_price}', orders_status = '${orders_status}' WHERE orders_id = '${orders_id}'`;
 
   connection.query(query, (err, result) => {
     if (err) {
