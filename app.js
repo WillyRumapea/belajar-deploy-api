@@ -329,11 +329,44 @@ app.put("/update-makanan", (req, res) => {
   });
 });
 
+app.delete("/hapus-makanan/:id_makanan", (req, res) => {
+  const { id_makanan } = req.params;
+  if (!id_makanan) {
+    return res.status(400).json({
+      success: false,
+      message: "undefined id_makanan",
+    });
+  }
+  const query = `DELETE FROM table_makanan WHERE id_makanan = ${id_makanan}`;
+  connection.query(query, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error!",
+        error: err,
+      });
+    }
+    if (result.affectedRows > 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Success delete data makanan!",
+        data: result,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Failed delete data makanan!",
+        error: err,
+      });
+    }
+  });
+});
+
 app.put("/update-user", hashPassword, (req, res) => {
   const { users_id, users_name, users_password, users_role } = req.body;
 
   if (!users_id || !users_name || !users_password || !users_role) {
-    return res.status(400).send("cant update while field undifined");
+    return res.status(400).send("cant update while field undefined");
   }
 
   const query = `UPDATE users_table SET users_name = '${users_name}', users_password = '${users_password}', users_role = '${users_role}' WHERE users_id = '${users_id}'`;
