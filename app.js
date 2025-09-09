@@ -394,7 +394,7 @@ app.put("/update-user", hashPassword, (req, res) => {
   });
 });
 
-app.delete("/delete-user/:users_id", (req, res) => {
+app.delete("/hapus-user/:users_id", (req, res) => {
   const { users_id } = req.params;
 
   if (!users_id) {
