@@ -394,6 +394,40 @@ app.put("/update-user", hashPassword, (req, res) => {
   });
 });
 
+app.delete("/delete-user/:users_id", (req, res) => {
+  const { users_id } = req.params;
+
+  if (!users_id) {
+    return res.status(400).json({
+      success: false,
+      message: "Undefined users id",
+    });
+  }
+
+  const query = `DELETE FROM users_table WHERE users_id = ${users_id}`;
+  connection.query(query, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
+    }
+    if (result.affectedRows > 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Success delete data user",
+        result: result,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Failed delete data user",
+        error: err,
+      });
+    }
+  });
+});
+
 app.put("/update-order", (req, res) => {
   const {
     orders_id,
