@@ -356,7 +356,6 @@ app.delete("/hapus-makanan/:id_makanan", (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Failed delete data makanan!",
-        error: err,
       });
     }
   });
@@ -422,7 +421,6 @@ app.delete("/hapus-user/:users_id", (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Failed delete data user",
-        error: err,
       });
     }
   });
@@ -471,6 +469,39 @@ app.put("/update-order", (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Failed to update data order",
+      });
+    }
+  });
+});
+
+app.delete("/hapus-order/:orders_id", (req, res) => {
+  const { orders_id } = req.params;
+
+  if (!orders_id) {
+    return res.status(400).json({
+      success: false,
+      message: "Undefined orders id",
+    });
+  }
+
+  const query = `DELETE FROM orders_table WHERE orders_id = ${orders_id}`;
+  connection.query(query, (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error",
+      });
+    }
+    if (result.affectedRows > 0) {
+      return res.status(200).json({
+        success: true,
+        message: "Success delete data order",
+        result: result,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Failed delete data order",
       });
     }
   });
