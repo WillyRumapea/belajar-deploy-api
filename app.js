@@ -484,7 +484,7 @@ app.delete("/hapus-order/:orders_id", (req, res) => {
     });
   }
 
-  const query = `DELETE FROM orders_table WHERE orders_id = ${orders_id}`;
+  const query = `DELETE FROM orders_table WHERE orders_id = '${orders_id}'`;
   connection.query(query, (err, result) => {
     if (err) {
       return res.status(500).json({
