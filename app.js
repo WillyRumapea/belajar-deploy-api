@@ -133,6 +133,7 @@ app.post("/login", async (req, res) => {
       req.session.user = {
         id: result[0].users_id,
         username: users_name,
+        role: result[0].users_role,
       };
       console.log("User logged in:", req.session);
       return res.status(200).send({
