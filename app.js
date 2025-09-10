@@ -10,6 +10,7 @@ const session = require("express-session");
 const hasgRegist = require("./middleware/hashRegist");
 const hashLogin = require("./middleware/hashLogin");
 const hashPassword = require("./middleware/hashRegist");
+const isAdmin = require("./middleware/isAdmin");
 
 app.set("trust proxy", 1);
 app.use(bodyParser.json());
@@ -240,7 +241,7 @@ app.get("/daftar-makanan", (req, res) => {
 });
 
 //endpoint admin
-app.get("/daftar-users", (req, res) => {
+app.get("/daftar-users", isAdmin, (req, res) => {
   const query = `SELECT * FROM users_table`;
   connection.query(query, (err, result) => {
     if (err) {
@@ -265,7 +266,7 @@ app.get("/daftar-users", (req, res) => {
   });
 });
 
-app.get("/daftar-pesanan", (req, res) => {
+app.get("/daftar-pesanan", isAdmin, (req, res) => {
   const query = "SELECT * FROM orders_table";
   connection.query(query, (err, result) => {
     if (err) {
@@ -289,7 +290,7 @@ app.get("/daftar-pesanan", (req, res) => {
   });
 });
 
-app.post("/tambah-makanan", (req, res) => {
+app.post("/tambah-makanan", isAdmin, (req, res) => {
   console.log("Body Received:", req.body);
   const { nama_makanan, harga_makanan, gambar_makanan } = req.body;
   const query = `INSERT INTO table_makanan (nama_makanan, harga_makanan, gambar_makanan) VALUES ('${nama_makanan}', ${harga_makanan}, '${gambar_makanan}')`;
@@ -306,7 +307,7 @@ app.post("/tambah-makanan", (req, res) => {
   });
 });
 
-app.put("/update-makanan", (req, res) => {
+app.put("/update-makanan", isAdmin, (req, res) => {
   const { id_makanan, nama_makanan, harga_makanan, gambar_makanan } = req.body;
 
   if (!id_makanan || !nama_makanan || !harga_makanan || !gambar_makanan) {
@@ -329,7 +330,7 @@ app.put("/update-makanan", (req, res) => {
   });
 });
 
-app.delete("/hapus-makanan/:id_makanan", (req, res) => {
+app.delete("/hapus-makanan/:id_makanan", isAdmin, (req, res) => {
   const { id_makanan } = req.params;
   if (!id_makanan) {
     return res.status(400).json({
@@ -361,7 +362,7 @@ app.delete("/hapus-makanan/:id_makanan", (req, res) => {
   });
 });
 
-app.put("/update-user", hashPassword, (req, res) => {
+app.put("/update-user", isAdmin, hashPassword, (req, res) => {
   const { users_id, users_name, users_password, users_role } = req.body;
 
   if (!users_id || !users_name || !users_password || !users_role) {
@@ -393,7 +394,7 @@ app.put("/update-user", hashPassword, (req, res) => {
   });
 });
 
-app.delete("/hapus-user/:users_id", (req, res) => {
+app.delete("/hapus-user/:users_id", isAdmin, (req, res) => {
   const { users_id } = req.params;
 
   if (!users_id) {
@@ -426,7 +427,7 @@ app.delete("/hapus-user/:users_id", (req, res) => {
   });
 });
 
-app.put("/update-order", (req, res) => {
+app.put("/update-order", isAdmin, (req, res) => {
   const {
     orders_id,
     orders_customer,
@@ -474,7 +475,7 @@ app.put("/update-order", (req, res) => {
   });
 });
 
-app.delete("/hapus-order/:orders_id", (req, res) => {
+app.delete("/hapus-order/:orders_id", isAdmin, (req, res) => {
   const { orders_id } = req.params;
 
   if (!orders_id) {
