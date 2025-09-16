@@ -16,7 +16,7 @@ app.set("trust proxy", 1);
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: "https://belajar-deploy-fe-git-main-willeas-projects.vercel.app/",
+    origin: "https://belajar-deploy-fe-git-main-willeas-projects.vercel.app",
     credentials: true,
   })
 );
