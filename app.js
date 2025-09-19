@@ -297,8 +297,10 @@ app.post("/tambah-makanan", isAdmin, (req, res) => {
   const query = `INSERT INTO table_makanan (nama_makanan, harga_makanan, gambar_makanan) VALUES ('${nama_makanan}', ${harga_makanan}, '${gambar_makanan}')`;
   connection.query(query, (err, result) => {
     if (err) {
-      console.log("error:", err);
-      res.status(500).send("error from server", err);
+      return res.status(500).json({
+        success: false,
+        message: err,
+      });
     }
     if (result.affectedRows > 0) {
       res.status(200).send("succes add data!");
