@@ -303,9 +303,9 @@ app.post("/tambah-makanan", isAdmin, (req, res) => {
       });
     }
     if (result.affectedRows > 0) {
-      res.status(200).send("succes add data!");
+      return res.status(200).send("succes add data!");
     } else {
-      res.status(400).send("failed add data!");
+      return res.status(400).send("failed add data!");
     }
   });
 });
@@ -444,12 +444,16 @@ app.post("/tambah-order", isAdmin, (req, res) => {
   connection.query(query, (err, result) => {
     if (err) {
       console.log("error:", err);
-      res.status(500).send("error from server", err);
+      return res.status(500).json({
+        success: false,
+        message: "error from server",
+        error: err,
+      });
     }
     if (result.affectedRows > 0) {
-      res.status(200).send("succes add data!");
+      return res.status(200).send("succes add data!");
     } else {
-      res.status(400).send("failed add data!");
+      return res.status(400).send("failed add data!");
     }
   });
 });
