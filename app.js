@@ -438,9 +438,8 @@ app.post("/tambah-order", isAdmin, (req, res) => {
     orders_menu,
     orders_amount,
     orders_total_price,
-    orders_status,
   } = req.body;
-  const query = `INSERT INTO table_makanan (orders_id, orders_customer, orders_menu, orders_amount, orders_total_price, orders_status) VALUES ('${orders_id}', '${orders_customer}', '${orders_menu}', '${orders_amount}', '${orders_total_price}', '${orders_status}')`;
+  const query = `INSERT INTO orders_table (orders_id, orders_customer, orders_menu, orders_amount, orders_total_price) VALUES ('${orders_id}', '${orders_customer}', '${orders_menu}', '${orders_amount}', '${orders_total_price}')`;
   connection.query(query, (err, result) => {
     if (err) {
       console.log("error:", err);
