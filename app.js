@@ -428,6 +428,30 @@ app.delete("/hapus-user/:users_id", isAdmin, (req, res) => {
   });
 });
 
+app.post("/tambah-order", isAdmin, (req, res) => {
+  console.log("Body Received:", req.body);
+  const {
+    orders_id,
+    orders_customer,
+    orders_menu,
+    orders_amount,
+    orders_total_price,
+    orders_status,
+  } = req.body;
+  const query = `INSERT INTO table_makanan (orders_id, orders_customer, orders_menu, orders_amount, orders_total_price, orders_status) VALUES ('${orders_id}', ${orders_customer}, '${orders_menu}', '${orders_amount}', '${orders_total_price}', '${orders_status}')`;
+  connection.query(query, (err, result) => {
+    if (err) {
+      console.log("error:", err);
+      res.status(500).send("error from server", err);
+    }
+    if (result.affectedRows > 0) {
+      res.status(200).send("succes add data!");
+    } else {
+      res.status(400).send("failed add data!");
+    }
+  });
+});
+
 app.put("/update-order", isAdmin, (req, res) => {
   const {
     orders_id,
